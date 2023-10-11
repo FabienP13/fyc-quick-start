@@ -1,10 +1,19 @@
-const port = 8080;
+import { Application, Router } from "https://deno.land/x/oak/mod.ts";
+import { oakCors } from "https://deno.land/x/cors/mod.ts";
+import router from "./routes/index.ts";
 
-const handler = (request: Request): Response => {
-    const body = `Your user-agent is:\n\n${request.headers.get("user-agent") ?? "Unknown"}`;
+const app = new Application();
+const port: number = 8080;
 
-    return new Response(body, { status: 200 });
-};
+app.use(router.routes());
+app.use(router.allowedMethods());
+app.use(oakCors({ origin: "*" }));
 
-console.log(`HTTP server running. Access it at: http://localhost:8080/`);
-Deno.serve({ port }, handler);
+app.addEventListener("listen", ({ secure, hostname, port }) => {
+    const protocol = secure ? "https://" : "http://";
+    const url = `${protocol}${hostname ?? "localhost"}:${port}`;
+    console.log(`Listening on: ${port}`);
+});
+
+await app.listen({ port });
+export default app;
