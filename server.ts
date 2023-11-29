@@ -1,10 +1,15 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
-import router from "./routes/index.ts";
+import userRouter from "./routes/user.ts";
+import { config } from "https://deno.land/x/dotenv/mod.ts";
+
+const env = config();
+const { PORT, HOSTNAME } = env;
 
 const app = new Application();
-const port: number = 8080;
+const router = new Router();
 
+router.use("/user", userRouter.routes());
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(oakCors({ origin: "*" }));
@@ -15,5 +20,5 @@ app.addEventListener("listen", ({ secure, hostname, port }) => {
     console.log(`Listening on: ${port}`);
 });
 
-await app.listen({ port });
-export default app;
+const port = parseInt(PORT) || 8080;
+await app.listen({ port, hostname: HOSTNAME || "localhost" });
