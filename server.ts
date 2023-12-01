@@ -1,6 +1,7 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import userRouter from "./routes/user.ts";
+import roleRouter from "./routes/role.ts";
 import { config } from "https://deno.land/x/dotenv/mod.ts";
 
 const env = config();
@@ -10,6 +11,8 @@ const app = new Application();
 const router = new Router();
 
 router.use("/user", userRouter.routes());
+router.use("/role", roleRouter.routes());
+
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(oakCors({ origin: "*" }));
