@@ -1,161 +1,137 @@
 import { Context } from "https://deno.land/x/oak/mod.ts";
 import UserService from "../services/userService.ts";
-import {
-  UserSchemaAccountUpdate,
-  UserSchemaCreate,
-  UserSchemaInfoUpdate,
-  UserSchemaRoleUpdate,
-} from "../schema/usersSchema.ts";
+import { UserSchemaWalletUpdate, UserSchemaCreate, UserSchemaInfoUpdate, UserSchemaRoleUpdate } from "../schema/usersSchema.ts";
 
 const UserController = {
-  async getAllUsers(ctx: Context) {
-    try {
-      const users = await UserService.findAll();
-      ctx.response.status = 200;
-      ctx.response.body = users;
-    } catch (error) {
-      console.error("Error in getAllUsers method:", error);
-      ctx.response.status = 500;
-      ctx.response.body = { error: "Internal server error" };
-    }
-  },
-  async getUserById(ctx: Context) {
-    try {
-      const userId = ctx.params.id;
+    async getAllUsers(ctx: Context) {
+        try {
+            const users = await UserService.findAll();
+            ctx.response.status = 200;
+            ctx.response.body = users;
+        } catch (error) {
+            ctx.response.status = 500;
+            ctx.response.body = { error: "Erreur survenue dans la méthode getAllUsers." };
+        }
+    },
+    async getUserById(ctx: Context) {
+        try {
+            const userId = ctx.params.userId;
 
-      const result = await UserService.findById(parseInt(userId));
-      if (!result) {
-        ctx.response.status = 404;
-        ctx.response.body = { error: "Utilisateur non trouvé" };
-        return;
-      }
+            const result = await UserService.findById(parseInt(userId));
+            if (!result) {
+                ctx.response.status = 404;
+                ctx.response.body = { error: "Utilisateur non trouvé." };
+                return;
+            }
 
-      ctx.response.status = 200;
-      ctx.response.body = result;
-    } catch (error) {
-      console.error("Error in getUserById method:", error);
-      ctx.response.status = 500;
-      ctx.response.body = { error: "Internal server error" };
-    }
-  },
-  async createUser(ctx: Context) {
-    try {
-      const data: UserSchemaCreate = await ctx.request.body().value;
+            ctx.response.status = 200;
+            ctx.response.body = result;
+        } catch (error) {
+            ctx.response.status = 500;
+            ctx.response.body = { error: "Erreur survenue dans la méthode getUserById." };
+        }
+    },
+    async createUser(ctx: Context) {
+        try {
+            const data: UserSchemaCreate = await ctx.request.body().value;
 
-      // Vérification si l'e-mail existe déjà
-      const existingUser = await UserService.findByEmail(data.email);
+            // Vérification si l'e-mail existe déjà
+            const existingUser = await UserService.findByEmail(data.email);
 
-      if (existingUser) {
-        ctx.response.status = 400;
-        ctx.response.body = {
-          error: "Cet email est déjà associée à un utilisateur",
-        };
-        return;
-      }
+            if (existingUser) {
+                ctx.response.status = 400;
+                ctx.response.body = {
+                    error: "Cet email est déjà associée à un utilisateur",
+                };
+                return;
+            }
 
-      const result = await UserService.create(data);
-      ctx.response.status = 201;
-      ctx.response.body = data; // renvoi true
-    } catch (error) {
-      console.error("Error in createUser method:", error);
-      ctx.response.status = 500;
-      ctx.response.body = { error: "Internal server error" };
-    }
-  },
-  async deleteUser(ctx: Context) {
-    try {
+            const result = await UserService.create(data);
+            ctx.response.status = 201;
+            ctx.response.body = data; // renvoi true
+        } catch (error) {
+            ctx.response.status = 500;
+            ctx.response.body = { error: "Erreur survenue dans la méthode createUser." };
+        }
+    },
 
-      const userId = ctx.params.id;
+    async updateUserInfo(ctx: Context) {
+        try {
+            const userId = ctx.params.id;
 
-      const result = await UserService.deleteById(parseInt(userId));
-      ctx.response.status = 200;
-      ctx.response.body = result;
-    } catch (error) {
-      console.error("Error in deleteUser method:", error);
-      ctx.response.status = 500;
-      ctx.response.body = { error: "Internal server error" };
-    }
-  },
-  async updateUserRole(ctx: Context) {
-    try {
-      const userId = ctx.params.id;
+            const data: UserSchemaInfoUpdate = await ctx.request.body().value;
+            data.id = parseInt(userId);
 
-      const data: UserSchemaRoleUpdate = await ctx.request.body().value;
-      data.id = parseInt(userId);
+            const existingUser = await UserService.findById(parseInt(userId));
 
-      const existingUser = await UserService.findById(parseInt(userId));
+            if (!existingUser) {
+                ctx.response.status = 404;
+                ctx.response.body = { error: "Utilisateur non trouvé" };
+                return;
+            }
 
-      if (!existingUser) {
-        ctx.response.status = 404;
-        ctx.response.body = { error: "Utilisateur non trouvé" };
-        return;
-      }
+            const result = await UserService.updateUserInfoById(data);
 
-      const result = await UserService.updateUserRoleById(data);
-      
-      if (!result) {
-        ctx.response.status = 400;
-        ctx.response.body = { error: "Aucune donnée mise à jour fournie" };
-        return;
-      }
-      ctx.response.status = 200;
-      ctx.response.body = result;
-    } catch (error) {
-      console.error("Error in updateUserRole method:", error);
-      ctx.response.status = 500;
-      ctx.response.body = { error: "Internal server error" };
-    }
-  },
-  async updateUserInfo(ctx: Context) {
-    try {
-      const userId = ctx.params.id;
+            ctx.response.status = 200;
+            ctx.response.body = result;
+        } catch (error) {
+            ctx.response.status = 500;
+            ctx.response.body = { error: "Erreur survenue dans la méthode updateUserInfo." };
+        }
+    },
+    async updateUserRole(ctx: Context) {
+        try {
+            const userId = ctx.params.userId;
 
-      const data: UserSchemaInfoUpdate = await ctx.request.body().value;
-      data.id = parseInt(userId);
+            const data: UserSchemaRoleUpdate = await ctx.request.body().value;
+            data.id = parseInt(userId);
 
-      const existingUser = await UserService.findById(parseInt(userId));
+            const existingUser = await UserService.findById(parseInt(userId));
 
-      if (!existingUser) {
-        ctx.response.status = 404;
-        ctx.response.body = { error: "Utilisateur non trouvé" };
-        return;
-      }
+            if (!existingUser) {
+                ctx.response.status = 404;
+                ctx.response.body = { error: "Utilisateur non trouvé" };
+                return;
+            }
 
-      const result = await UserService.updateUserInfoById(data);
+            const result = await UserService.updateUserRoleById(data);
 
-      ctx.response.status = 200;
-      ctx.response.body = result;
-    } catch (error) {
-      console.error("Error in updateUserInfo method:", error);
-      ctx.response.status = 500;
-      ctx.response.body = { error: "Internal server error" };
-    }
-  },
-  async updateUserAccount(ctx: Context) {
-    try {
-      const userId = ctx.params.id;
+            if (!result) {
+                ctx.response.status = 400;
+                ctx.response.body = { error: "Aucune donnée mise à jour fournie" };
+                return;
+            }
+            ctx.response.status = 200;
+            ctx.response.body = result;
+        } catch (error) {
+            ctx.response.status = 500;
+            ctx.response.body = { error: "Erreur survenue dans la méthode updateUserRole." };
+        }
+    },
+    async updateUserWallet(ctx: Context) {
+        try {
+            const userId = ctx.params.id;
 
-      const data: UserSchemaAccountUpdate = await ctx.request.body().value;
-      data.id = parseInt(userId);
+            const data: UserSchemaWalletUpdate = await ctx.request.body().value;
+            data.id = parseInt(userId);
 
-      const existingUser = await UserService.findById(parseInt(userId));
+            const existingUser = await UserService.findById(parseInt(userId));
 
-      if (!existingUser) {
-        ctx.response.status = 404;
-        ctx.response.body = { error: "Utilisateur non trouvé" };
-        return;
-      }
+            if (!existingUser) {
+                ctx.response.status = 404;
+                ctx.response.body = { error: "Utilisateur non trouvé" };
+                return;
+            }
 
-      const result = await UserService.updateUserAccountById(data);
+            const result = await UserService.updateUserWalletById(data);
 
-      ctx.response.status = 200;
-      ctx.response.body = result;
-    } catch (error) {
-      console.error("Error in updateUserAccount method:", error);
-      ctx.response.status = 500;
-      ctx.response.body = { error: "Internal server error" };
-    }
-  },
+            ctx.response.status = 200;
+            ctx.response.body = result;
+        } catch (error) {
+            ctx.response.status = 500;
+            ctx.response.body = { error: "Erreur survenue dans la méthode updateUserWallet." };
+        }
+    },
 };
 
 export default UserController;

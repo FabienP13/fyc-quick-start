@@ -6,7 +6,7 @@ export interface UserSchema {
     lastName: string;
     email: string;
     password: string;
-    account: number;
+    wallet: number;
     isCdu: boolean;
     cduAcceptedAt: Date;
     registerAt: Date;
@@ -19,7 +19,7 @@ export interface UserSchemaCreate {
     lastName: string;
     email: string;
     password: string;
-    account: number;
+    wallet: number;
     isCdu: boolean;
     cduAcceptedAt: Date;
     roleId: number;
@@ -36,7 +36,7 @@ export interface UserSchemaInfoUpdate {
     email?: string;
 }
 
-export interface UserSchemaAccountUpdate {
+export interface UserSchemaWalletUpdate {
     id: number;
-    account: number;
+    value: number;
 }

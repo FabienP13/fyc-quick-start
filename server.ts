@@ -10,8 +10,8 @@ const { PORT, HOSTNAME } = env;
 const app = new Application();
 const router = new Router();
 
-router.use("/user", userRouter.routes());
-router.use("/role", roleRouter.routes());
+router.use("/users", userRouter.routes());
+router.use("/roles", roleRouter.routes());
 
 app.use(router.routes());
 app.use(router.allowedMethods());
