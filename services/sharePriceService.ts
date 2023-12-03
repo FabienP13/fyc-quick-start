@@ -1,4 +1,4 @@
-import dbClient from "../connectDB.ts";
+import dbClient from "../connectDb.ts";
 import { SharePriceSchema, SharePriceSchemaCreate, SharePriceSchemaUpdate } from "../schema/sharePricesSchema.ts";
 
 const SharePriceService = {

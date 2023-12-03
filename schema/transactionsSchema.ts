@@ -7,7 +7,7 @@ export interface TransactionSchema {
     typeTransaction: string;
     transactedAt: Date;
     user: UserSchema;
-    sharePrice: SharePriceSchema;
+    sharePriceId: number;
 }
 
 export interface TransactionSchemaCreate {

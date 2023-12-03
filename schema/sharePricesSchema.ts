@@ -7,7 +7,6 @@ export interface SharePriceSchema {
     volume: string;
     createdAt: Date;
     updatedAt: Date;
-    // transaction: TransactionSchema[];
 }
 
 export interface SharePriceSchemaCreate {
