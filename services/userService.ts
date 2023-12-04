@@ -28,7 +28,7 @@ const UserService = {
     },
     create: async (data: UserSchemaCreate): Promise<boolean> => {
         try {
-            await dbClient.query("INSERT INTO users (first_name, last_name, email, password, account, is_cdu, cdu_accepted_at, register_at, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)", [
+            await dbClient.query("INSERT INTO users (first_name, last_name, email, password, wallet, is_cdu, cdu_accepted_at, register_at, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)", [
                 data.firstName,
                 data.lastName,
                 data.email,
@@ -73,7 +73,7 @@ const UserService = {
 
     updateUserWalletById: async (data: UserSchemaWalletUpdate): Promise<boolean> => {
         try {
-            await dbClient.query("UPDATE users SET account = ?, updated_at = NOW() WHERE id = ?", [data.account, data.id]);
+            await dbClient.query("UPDATE users SET wallet = ?, updated_at = NOW() WHERE id = ?", [data.wallet, data.id]);
             return true;
         } catch (error) {
             throw new Error(`Erreur lors de la mise à jour du portefeuille de l'utilisateur : ${error.message}`);
