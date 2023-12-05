@@ -11,7 +11,7 @@ export interface UserSchema {
     cduAcceptedAt: Date;
     registerAt: Date;
     updatedAt: Date;
-    role: RoleSchema;
+    roleId: number;
 }
 
 export interface UserSchemaCreate {

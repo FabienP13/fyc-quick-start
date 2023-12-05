@@ -5,7 +5,6 @@ export interface RoleSchema {
     name: string;
     createdAt: Date;
     updatedAt: Date;
-    user: UserSchema[];
 }
 
 export interface RoleSchemaCreate {
