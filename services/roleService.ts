@@ -1,4 +1,4 @@
-import dbClient from "../connectDB.ts";
+import dbClient from "../connectDb.ts";
 import { RoleSchema, RoleSchemaCreate, RoleSchemaUpdate } from "../schema/rolesSchema.ts";
 
 const RoleService = {

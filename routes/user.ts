@@ -7,7 +7,7 @@ router
     .get("/:userId", UserController.getUserById)
     .post("/", UserController.createUser)
     .put("/:userId/roles", UserController.updateUserRole)
-    .put("/:id/info", UserController.updateUserInfo)
-    .put("/:id/wallet", UserController.updateUserWallet);
+    .put("/:userId/info", UserController.updateUserInfo)
+    .put("/:userId/wallet", UserController.updateUserWallet);
 
 export default router;

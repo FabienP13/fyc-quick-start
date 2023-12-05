@@ -1,5 +1,3 @@
-import { UserSchema } from "./usersSchema.ts";
-
 export interface RoleSchema {
     id: number;
     name: string;

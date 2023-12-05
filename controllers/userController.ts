@@ -57,7 +57,7 @@ const UserController = {
 
     async updateUserInfo(ctx: Context) {
         try {
-            const userId = ctx.params.id;
+            const userId = ctx.params.userId;
 
             const data: UserSchemaInfoUpdate = await ctx.request.body().value;
             data.id = parseInt(userId);
@@ -110,7 +110,7 @@ const UserController = {
     },
     async updateUserWallet(ctx: Context) {
         try {
-            const userId = ctx.params.id;
+            const userId = ctx.params.userId;
 
             const data: UserSchemaWalletUpdate = await ctx.request.body().value;
             data.id = parseInt(userId);

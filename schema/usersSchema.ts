@@ -1,5 +1,3 @@
-import { RoleSchema } from "./rolesSchema.ts";
-
 export interface UserSchema {
     id: number;
     firstName: string;
@@ -38,5 +36,5 @@ export interface UserSchemaInfoUpdate {
 
 export interface UserSchemaWalletUpdate {
     id: number;
-    value: number;
+    wallet: number;
 }
